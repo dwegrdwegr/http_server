@@ -8,7 +8,7 @@ class ThreadSafeQueue
 {
     public:
         Work pop();
-        void push( Work item );
+        void push( const Work& item );
         void push( Work&& item );
     private:
         std::queue<Work> queue;

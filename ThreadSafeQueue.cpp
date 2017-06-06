@@ -18,7 +18,7 @@ Work ThreadSafeQueue::pop()
     return item;
 }
 
-void ThreadSafeQueue::push( Work item )
+void ThreadSafeQueue::push( const Work& item )
 {
     pthread_mutex_lock( &mutex );
     queue.push( item );

@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+#Debug folder
+/Debug/*
+
+#Project
+*.project
+*.mk
+http_server.txt
