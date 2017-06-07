@@ -1,7 +1,6 @@
 #include <exception>
 #include "ThreadSafeQueue.h"
 #include "Work.h"
-#include "MyLockGuard.h"
 
 Work ThreadSafeQueue::pop()
 {

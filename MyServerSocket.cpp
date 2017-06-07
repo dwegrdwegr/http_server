@@ -24,7 +24,7 @@ void MyServerSocket::bind()
     addr.sin6_flowinfo = 0;
     addr.sin6_addr = IN6ADDR_ANY_INIT;
     addr.sin6_port = htons ( port );
-    int result = ::bind( socket_fd, ( sockaddr * ) &addr,sizeof( addr ) );
+    int result = ::bind( socket_fd, reinterpret_cast<sockaddr *>( &addr ), sizeof( addr ) );
     if( result < 0 )
     {
         throw std::bad_exception();

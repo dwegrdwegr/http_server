@@ -10,6 +10,7 @@ class MyThreadPool
         ThreadSafeQueue queue;
         uint8_t count;
     public:
+        friend class MyThread;
         MyThreadPool();
         ~MyThreadPool();
         template <typename T>
