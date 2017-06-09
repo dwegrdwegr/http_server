@@ -1,6 +1,7 @@
 #include "MyThread.h"
 #include "MyThreadPool.h"
 #include "HttpRequests.h"
+#include "HttpResponse.h"
 #include "HttpParser.h"
 #include <exception>
 
@@ -26,7 +27,8 @@ void MyThread::run()
     {
         Work w = parent->queue.pop();
         std::unique_ptr<HttpRequest> req = parser.parse( w.http_string );
-        req->process( w.socket_fd );
+        HttpResponse response = req->process();
+        w.socket_fd.send( response.to_string() );
     }
 }
 void* MyThread::start( void* arg )

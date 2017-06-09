@@ -32,9 +32,21 @@ void MyServerSocket::bind()
 }
 void MyServerSocket::listen( int n )
 {
-    ::listen( socket_fd, n );
+    int result = ::listen( socket_fd, n );
+    if ( result != 0 )
+    {
+        throw std::bad_exception();
+    }
 }
 int MyServerSocket::accept()
 {
     return ::accept( socket_fd, nullptr, nullptr );
+}
+void MyServerSocket::send( const std::string& msg )
+{
+    ( void )::send( socket_fd, ( void * ) msg.c_str(), msg.length(), 0 );
+}
+void MyServerSocket::recv()
+{
+    ( void ) ::recv( socket_fd, buffer, 1000, 0 );
 }

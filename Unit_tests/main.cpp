@@ -2,6 +2,7 @@
 #include "../Work.h"
 #include "../HttpParser.h"
 #include "../HttpRequests.h"
+#include "../htmls.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -68,30 +69,66 @@ SUITE( Http )
         public:
             Work work;
             HttpParser parser;
-            Work_fixture()
+            Work_fixture(): work {1}
             {
-                work.socket_fd = 1;
-                work.http_string = "GET /hello.htm HTTP/1.1\r\n"
-                                   "User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\r\n"
-                                   "Host: www.tutorialspoint.com\r\n"
-                                   "Accept-Language: en-us\r\n"
-                                   "Accept-Encoding: gzip, deflate\r\n"
-                                   "Connection: Keep-Alive\r\n"
-                                   "\r\n"
-                                   "Message body";
+                work.http_string = "GET /login.html HTTP/1.1\r\n"
+                "User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\r\n"
+                "Host: www.tutorialspoint.com\r\n"
+                "Accept-Language: en-us\r\n"
+                "Accept-Encoding: gzip, deflate\r\n"
+                "Connection: Keep-Alive\r\n"
+                "\r\n"
+                "Message body";
             }
             ~Work_fixture() {};
     };
+    class Work_fixture2
+    {
+        public:
+            Work work;
+            HttpParser parser;
+            Work_fixture2(): work {1}
+            {
+                work.http_string = "GET /hello.html HTTP/1.1\r\n"
+                "User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\r\n"
+                "Host: www.tutorialspoint.com\r\n"
+                "Accept-Language: en-us\r\n"
+                "Accept-Encoding: gzip, deflate\r\n"
+                "Connection: Keep-Alive\r\n"
+                "\r\n"
+                "Message body";
+            }
+            ~Work_fixture2() {};
+    };
     TEST_FIXTURE( Work_fixture, ParsingHTTP )
     {
-        HttpRequest req = parser.parse( work.http_string );
-        CHECK( req.method == method_type::GET );
-        CHECK( req.headers.find( "User-Agent" )->second == "Mozilla/4.0 (compatible; MSIE5.01; Windows NT)" );
-        CHECK( req.headers.find( "Host" )->second == "www.tutorialspoint.com" );
-        CHECK( req.headers.find( "Accept-Language" )->second == "en-us" );
-        CHECK( req.headers.find( "Accept-Encoding" )->second == "gzip, deflate" );
-        CHECK( req.headers.find( "Connection" )->second == "Keep-Alive" );
-        CHECK( req.content == "Message body" );
+        std::unique_ptr<HttpRequest> req = parser.parse( work.http_string );
+        CHECK( req->method == method_type::GET );
+        CHECK( req->url == "/login.html" );
+        CHECK( req->http_version == "HTTP/1.1" );
+        CHECK( req->headers.find( "User-Agent" )->second == "Mozilla/4.0 (compatible; MSIE5.01; Windows NT)" );
+        CHECK( req->headers.find( "Host" )->second == "www.tutorialspoint.com" );
+        CHECK( req->headers.find( "Accept-Language" )->second == "en-us" );
+        CHECK( req->headers.find( "Accept-Encoding" )->second == "gzip, deflate" );
+        CHECK( req->headers.find( "Connection" )->second == "Keep-Alive" );
+        CHECK( req->content == "Message body" );
+    }
+    TEST_FIXTURE( Work_fixture, ResponseHTTP )
+    {
+        std::unique_ptr<HttpRequest> req = parser.parse( work.http_string );
+        HttpResponse res = req->process();
+        CHECK( res.http_version == "HTTP/1.1" );
+        CHECK( res.status_code == "200" );
+        CHECK( res.status_desc == "OK" );
+        CHECK( res.content == login_html );
+    }
+    TEST_FIXTURE( Work_fixture2, WrongRequestResponseHTTP )
+    {
+        std::unique_ptr<HttpRequest> req = parser.parse( work.http_string );
+        HttpResponse res = req->process();
+        CHECK( res.http_version == "HTTP/1.1" );
+        CHECK( res.status_code == "404" );
+        CHECK( res.status_desc == "Not found");
     }
 }
 int main( int argc, char **argv )
