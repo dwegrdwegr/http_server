@@ -1,5 +1,6 @@
 #include "MyServerSocket.h"
 #include <exception>
+#include <algorithm>
 
 MyServerSocket::MyServerSocket( uint16_t p, int domain , int type, int protocol ) : port { p }
 {
@@ -12,10 +13,29 @@ MyServerSocket::MyServerSocket( uint16_t p, int domain , int type, int protocol 
     int optlen = sizeof( opt );
     setsockopt( socket_fd, SOL_SOCKET, SO_KEEPALIVE, &opt, optlen );
 }
+MyServerSocket::MyServerSocket( int32_t fd )
+{
+    socket_fd = fd;
+    int opt = 1;
+    int optlen = sizeof( opt );
+    setsockopt( socket_fd, SOL_SOCKET, SO_KEEPALIVE, &opt, optlen );
+}
+MyServerSocket::MyServerSocket( const MyServerSocket& second )
+{
+    this->addr.sin6_family = AF_INET6;
+    this->addr.sin6_flowinfo = 0;
+    this->addr.sin6_addr = IN6ADDR_ANY_INIT;
+    this->addr.sin6_port = htons ( second.port );
+    this->port = second.port;
+    this->socket_fd = second.socket_fd;
+    for( int i = 0; i < 1000; i++ )
+    {
+        this->buffer[i] = second.buffer[i];
+    }
+}
 
 MyServerSocket::~MyServerSocket()
 {
-    close( socket_fd );
 }
 
 void MyServerSocket::bind()
@@ -46,7 +66,23 @@ void MyServerSocket::send( const std::string& msg )
 {
     ( void )::send( socket_fd, ( void * ) msg.c_str(), msg.length(), 0 );
 }
-void MyServerSocket::recv()
+int MyServerSocket::recv()
 {
-    ( void ) ::recv( socket_fd, buffer, 1000, 0 );
+    return ::recv( socket_fd, buffer, 1000, 0 );
+}
+void MyServerSocket::close()
+{
+    ( void ) ::close( socket_fd );
+}
+std::string MyServerSocket::get_buffer( int n ) const
+{
+    return std::string( buffer, n );
+}
+void MyServerSocket::clear_buffer()
+{
+    std::fill( buffer, buffer + 1000, 0 );
+}
+const int32_t& MyServerSocket::get_socket() const noexcept
+{
+    return socket_fd;
 }

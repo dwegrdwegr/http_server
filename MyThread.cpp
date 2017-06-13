@@ -19,6 +19,10 @@ int MyThread::join()
 {
     return pthread_join( pthread, NULL );
 }
+int MyThread::cancel()
+{
+    return pthread_cancel( pthread );
+}
 
 void MyThread::run()
 {

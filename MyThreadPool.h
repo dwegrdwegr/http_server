@@ -6,15 +6,18 @@
 
 class MyThreadPool
 {
-        std::vector<MyThread> threads;
         ThreadSafeQueue queue;
+        std::vector<MyThread> threads;
         uint8_t count;
     public:
         friend class MyThread;
         MyThreadPool();
         ~MyThreadPool();
-        template <typename T>
-        void add_work( T&& work );
+        template <class T>
+        void add_work( T && work )
+        {
+            queue.push( std::forward<T>( work ) );
+        }
 };
 
 #endif // _MYTHREADPOOL_H

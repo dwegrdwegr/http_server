@@ -1,7 +1,8 @@
-#include <iostream>
-#include <pthread.h>
+#include "MyServer.h"
 
-int main(int argc, char **argv)
+int main( int, char** )
 {
-	return 0;
+    MyServer server;
+    server.run();
+    return 0;
 }

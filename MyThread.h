@@ -9,11 +9,10 @@ class MyThread
     public:
         MyThread( MyThreadPool* parent );
         int join();
-
+        int cancel();
     private:
         void run();
         static void* start( void* arg );
-        
         pthread_t pthread;
         MyThreadPool* parent;
         bool execute;

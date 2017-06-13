@@ -7,9 +7,11 @@
 class ThreadSafeQueue
 {
     public:
+        ThreadSafeQueue();
+        ~ThreadSafeQueue();
         Work pop();
         void push( const Work& item );
-        void push( Work&& item );
+        void push( Work && item );
     private:
         std::queue<Work> queue;
         pthread_cond_t condition_variable;

@@ -14,10 +14,8 @@ MyThreadPool::MyThreadPool()
 
 MyThreadPool::~MyThreadPool()
 {
-}
-
-template <typename T>
-void MyThreadPool::add_work( T&& work )
-{
-    queue.push( std::forward<T>( work ) );
+    for( auto t : threads)
+    {
+        t.cancel();
+    }
 }
