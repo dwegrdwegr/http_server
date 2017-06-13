@@ -9,6 +9,8 @@ class ThreadSafeQueue
     public:
         ThreadSafeQueue();
         ~ThreadSafeQueue();
+        ThreadSafeQueue( const ThreadSafeQueue& ) = delete;
+        ThreadSafeQueue& operator=( const ThreadSafeQueue& ) = delete;
         Work pop();
         void push( const Work& item );
         void push( Work && item );
