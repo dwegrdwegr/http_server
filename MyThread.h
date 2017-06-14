@@ -10,8 +10,9 @@ class MyThread
         MyThread( MyThreadPool* parent );
         int join();
         int cancel();
+        void create();
     private:
-        void run();
+        void run();      
         static void* start( void* arg );
         pthread_t pthread;
         MyThreadPool* parent;

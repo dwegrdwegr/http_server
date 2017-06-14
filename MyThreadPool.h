@@ -8,11 +8,12 @@ class MyThreadPool
 {
         ThreadSafeQueue queue;
         std::vector<MyThread> threads;
-        uint8_t count;
+        int count;
     public:
         friend class MyThread;
         MyThreadPool();
         ~MyThreadPool();
+        void start_threads();
         template <class T>
         void add_work( T && work )
         {

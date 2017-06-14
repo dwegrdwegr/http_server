@@ -1,5 +1,6 @@
 #include "MyServerSocket.h"
 #include <exception>
+#include <errno.h>
 #include <algorithm>
 
 MyServerSocket::MyServerSocket( uint16_t p, int domain , int type, int protocol ) : port { p }
@@ -47,6 +48,7 @@ void MyServerSocket::bind()
     int result = ::bind( socket_fd, reinterpret_cast<sockaddr *>( &addr ), sizeof( addr ) );
     if( result < 0 )
     {
+        perror("Bind nawalil");
         throw std::bad_exception();
     }
 }

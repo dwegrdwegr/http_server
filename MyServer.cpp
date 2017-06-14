@@ -11,6 +11,7 @@ MyServer::~MyServer()
 }
 void MyServer::run()
 {
+    pool.start_threads();
     std::vector<MyServerSocket> connected;
     fd_set fds;
     int nfds;

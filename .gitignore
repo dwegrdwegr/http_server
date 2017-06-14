@@ -38,3 +38,5 @@
 *.project
 *.mk
 http_server.txt
+/build/
+/dist/

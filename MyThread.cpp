@@ -8,11 +8,6 @@
 MyThread::MyThread( MyThreadPool* parent )
 {
     this->parent = parent;
-    int result = pthread_create( &pthread, nullptr, MyThread::start, static_cast<void *>( this ) );
-    if ( result != 0 )
-    {
-        throw std::bad_exception();
-    }
 }
 
 int MyThread::join()
@@ -35,9 +30,18 @@ void MyThread::run()
         w.socket_fd.send( response.to_string() );
     }
 }
+
+void MyThread::create()
+{
+    int result = pthread_create( &pthread, nullptr, MyThread::start, static_cast<void *>( this ) );
+    if ( result != 0 )
+    {
+        throw std::bad_exception();
+    }
+}
 void* MyThread::start( void* arg )
 {
     MyThread* this_thread = static_cast<MyThread *>( arg );
     this_thread->run();
-    pthread_exit( nullptr );
+    //pthread_exit( nullptr );
 }

@@ -2,20 +2,28 @@
 #include <utility>
 #include <unistd.h>
 
-MyThreadPool::MyThreadPool()
+MyThreadPool::MyThreadPool( )
 {
-    count = sysconf( _SC_NPROCESSORS_ONLN );
-    for( int i = 0; i < count; i ++ )
+    count = 1; //sysconf( _SC_NPROCESSORS_ONLN );
+    for ( int i = 0; i < count; i++ )
     {
         MyThread thread( this );
         threads.push_back( thread );
     }
 }
 
-MyThreadPool::~MyThreadPool()
+void MyThreadPool::start_threads( )
 {
-    for( auto t : threads)
+    for ( auto t : threads )
     {
-        t.cancel();
+        t.create();
+    }
+}
+
+MyThreadPool::~MyThreadPool( )
+{
+    for ( auto t : threads )
+    {
+        t.cancel( );
     }
 }
