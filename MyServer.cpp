@@ -11,7 +11,7 @@ MyServer::~MyServer()
 }
 void MyServer::run()
 {
-    pool.start_threads();
+    pool.start_threads(&work_queue);
     std::vector<MyServerSocket> connected;
     fd_set fds;
     int nfds;
@@ -51,7 +51,7 @@ void MyServer::run()
                             std::string received( it->get_buffer( amount ) );
                             it->clear_buffer();
                             Work w { *it, received };
-                            pool.add_work( std::move( w ) );
+                            work_queue.push( std::move( w ) );
                         }
                         else if( amount == 0 )  // connection is closed
                         {

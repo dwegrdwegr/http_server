@@ -15,8 +15,8 @@ class ThreadSafeQueue
         void push( const Work& item );
         void push( Work && item );
     private:
-        std::queue<Work> queue;
         pthread_cond_t condition_variable;
         pthread_mutex_t mutex;
+        std::queue<Work> queue;
 };
 #endif

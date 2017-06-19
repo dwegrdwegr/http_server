@@ -10,12 +10,12 @@
             <file>file:/home/dawid/git_repositories/http_server/main.cpp</file>
             <file>file:/home/dawid/git_repositories/http_server/MyThread.cpp</file>
             <file>file:/home/dawid/git_repositories/http_server/ThreadSafeQueue.cpp</file>
-            <file>file:/home/dawid/git_repositories/http_server/MyServerSocket.cpp</file>
             <file>file:/home/dawid/git_repositories/http_server/MyServer.cpp</file>
-            <file>file:/home/dawid/git_repositories/http_server/Work.h</file>
-            <file>file:/home/dawid/git_repositories/http_server/MyThreadPool.cpp</file>
+            <file>file:/home/dawid/git_repositories/http_server/MyServer.h</file>
             <file>file:/home/dawid/git_repositories/http_server/MyThreadPool.h</file>
+            <file>file:/home/dawid/git_repositories/http_server/MyThreadPool.cpp</file>
             <file>file:/home/dawid/git_repositories/http_server/ThreadSafeQueue.h</file>
+            <file>file:/home/dawid/git_repositories/http_server/MyThread.h</file>
         </group>
     </open-files>
 </project-private>

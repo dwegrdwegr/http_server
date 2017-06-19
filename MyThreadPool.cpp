@@ -7,22 +7,22 @@ MyThreadPool::MyThreadPool( )
     count = 1; //sysconf( _SC_NPROCESSORS_ONLN );
     for ( int i = 0; i < count; i++ )
     {
-        MyThread thread( this );
+        MyThread thread;
         threads.push_back( thread );
     }
 }
 
-void MyThreadPool::start_threads( )
+void MyThreadPool::start_threads( ThreadSafeQueue* q)
 {
-    for ( auto t : threads )
+    for ( auto& t : threads )
     {
-        t.create();
+        t.create(q);
     }
 }
 
 MyThreadPool::~MyThreadPool( )
 {
-    for ( auto t : threads )
+    for ( auto& t : threads )
     {
         t.cancel( );
     }

@@ -12,6 +12,7 @@
       <itemPath>MyThread.h</itemPath>
       <itemPath>MyThreadPool.h</itemPath>
       <itemPath>ThreadSafeQueue.h</itemPath>
+      <itemPath>Work.h</itemPath>
       <itemPath>htmls.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -91,6 +92,8 @@
       </item>
       <item path="ThreadSafeQueue.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Work.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="htmls.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -147,6 +150,8 @@
       <item path="ThreadSafeQueue.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ThreadSafeQueue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Work.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="htmls.h" ex="false" tool="3" flavor2="0">
       </item>
