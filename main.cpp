@@ -19,7 +19,8 @@ int main( int, char** )
     pthread_create( &t, NULL, start, &xD );
     for ( int i = 0; i < 10000; i++ )
         xD.push({ 1, "GET /login.html HTTP/1.1" } );
-
+    
+    pthread_join(t, NULL);
     //MyServer server;
     //server.run();
     return 0;
