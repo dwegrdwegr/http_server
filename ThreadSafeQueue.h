@@ -1,4 +1,4 @@
-#include <deque>
+#include <queue>
 #include <pthread.h>
 #include "Work.h"
 #ifndef _THREADSAFEQUEUE_H
@@ -15,7 +15,7 @@ class ThreadSafeQueue
         void push( const Work& item );
         void push( Work && item );
     private:
-        std::deque<Work> queue;
+        std::queue<Work> queue;
         pthread_cond_t condition_variable;
         pthread_mutex_t mutex;
 };

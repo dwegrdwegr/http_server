@@ -14,6 +14,8 @@ ThreadSafeQueue::~ThreadSafeQueue()
 }
 Work ThreadSafeQueue::pop()
 { 
+    int a = queue.size();
+    printf("Dupa");
     pthread_mutex_lock( &mutex );
     while( queue.empty() )
     {
@@ -24,8 +26,8 @@ Work ThreadSafeQueue::pop()
         }
     };
     Work item = queue.front();
-    queue.pop_front();
-    //queue.pop();
+    //queue.pop_front();
+    queue.pop();
     if( pthread_mutex_unlock( &mutex ) != 0 )
     {
         perror( "Mutex unlock pop" );
@@ -36,8 +38,8 @@ Work ThreadSafeQueue::pop()
 void ThreadSafeQueue::push( const Work& item )
 {
     pthread_mutex_lock( &mutex );
-    queue.push_front(item);
-    //queue.push( item );
+    //queue.push_front(item);
+    queue.push( item );
     pthread_mutex_unlock( &mutex );
     pthread_cond_signal( &condition_variable );
 }
@@ -45,8 +47,9 @@ void ThreadSafeQueue::push( const Work& item )
 void ThreadSafeQueue::push( Work && item )
 {
     pthread_mutex_lock( &mutex );
-    queue.push_front(item);
-    //queue.push( std::move( item ) );
-    pthread_mutex_unlock( &mutex );
+    //queue.push_front(item);
+    queue.push( std::move( item ) );
     pthread_cond_signal( &condition_variable );
+    pthread_mutex_unlock( &mutex );
+    //int a = 
 }
