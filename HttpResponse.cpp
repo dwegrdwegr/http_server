@@ -13,5 +13,13 @@ std::string HttpResponse::to_string()
     }
     str += "\r\n";
     str += content;
+    str += "\r\n\r\n";
     return str;
+}
+
+void HttpResponse::replace_substring( std::string& str, const std::string& what, const std::string& value )
+{
+    size_t pos =  str.find(what);
+    str.erase(pos,what.length());
+    str.insert(pos,value);
 }

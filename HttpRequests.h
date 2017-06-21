@@ -18,16 +18,16 @@ struct HttpRequest
     std::string http_version;
     std::map<std::string, std::string> headers;
     std::string content;
-    virtual HttpResponse process() = 0;
+    virtual HttpResponse process( ) = 0;
 };
 
-class HttpRequestGET: public HttpRequest
+class HttpRequestGET : public HttpRequest
 {
-        virtual HttpResponse process();
+    virtual HttpResponse process( );
 };
 
-class HttpRequestPOST: public HttpRequest
+class HttpRequestPOST : public HttpRequest
 {
-        virtual HttpResponse process();
+    virtual HttpResponse process( );
 };
 #endif // _HTTP_REQUEST_H

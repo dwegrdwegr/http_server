@@ -10,6 +10,7 @@ const std::string login_html = "<!DOCTYPE html>"
                                           "<input type=\"password\" name=\"password\"><br><br>"
                                           "<input type=\"submit\" value=\"Submit\">"
                                       "</form>"
+                                      "{error}"
                                   "</body>"
                               "</html>";
 

@@ -14,6 +14,7 @@ struct HttpResponse
         std::map<std::string, std::string> headers;
 
         std::string to_string();
+        void replace_substring( std::string& str, const std::string& what, const std::string& value );
 };
 
 #endif // _HTTP_RESPONSE_H

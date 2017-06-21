@@ -44,4 +44,5 @@ void* MyThread::start( void* arg )
 {
     MyThread* this_thread = static_cast < MyThread * > ( arg );
     this_thread->run( );
+    return NULL;
 }
