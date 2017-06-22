@@ -65,15 +65,17 @@ void MyUtility::add_session( MySession s )
     sessions.push_back( s );
 }
 
-bool MyUtility::check_timed_out_sessions( )
+void MyUtility::check_timed_out_sessions( )
 {
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now( );
+    MyMutexGuard guard(mutex);
     for ( size_t i = 0; i < sessions.size( ); i++ )
     {
         std::chrono::duration<double> dur = sessions[i].time - now;
         if ( dur.count( ) >= timeout )
         {
+            
             sessions.erase( sessions.begin( ) + i );
         }
-    }
+    }    
 }

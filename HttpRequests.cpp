@@ -7,8 +7,9 @@
 
 HttpResponse HttpRequestGET::process( )
 {
+    MyUtility::get_utility( ).check_timed_out_sessions( );
     HttpResponse response;
-    if ( url == "/login.html" || url == "/hello.html" )
+    if ( url == "/login.html" )
     {
         auto cookie = headers.find( "Cookie" );
 
@@ -21,10 +22,9 @@ HttpResponse HttpRequestGET::process( )
                 response.status_code = "200";
                 response.status_desc = "OK";
                 response.headers["Content-Type"] = "text/html; charset=UTF-8";
-                std::string page = login_html;
-                response.replace_substring( page, "{error}", "" );
-                response.headers["Content-Length"] = std::to_string( page.length( ) );
-                response.content = page;
+                response.content = login_html;
+                response.replace_content_substring( "{error}", "" );
+                response.headers["Content-Length"] = std::to_string( response.content.length( ) );
             }
             else
             {
@@ -33,10 +33,9 @@ HttpResponse HttpRequestGET::process( )
                 response.status_code = "200";
                 response.status_desc = "OK";
                 response.headers["Content-Type"] = "text/html; charset=UTF-8";
-                std::string page = hello_html;
-                response.replace_substring( page, "{username}", username );
-                response.headers["Content-Length"] = std::to_string( page.length( ) );
-                response.content = page;
+                response.content = hello_html;
+                response.replace_content_substring( "{username}", username );
+                response.headers["Content-Length"] = std::to_string( response.content.length( ) );
             }
         }
         else
@@ -45,10 +44,9 @@ HttpResponse HttpRequestGET::process( )
             response.status_code = "200";
             response.status_desc = "OK";
             response.headers["Content-Type"] = "text/html; charset=UTF-8";
-            std::string page = login_html;
-            response.replace_substring( page, "{error}", "" );
-            response.headers["Content-Length"] = std::to_string( page.length( ) );
-            response.content = page;
+            response.content = login_html;
+            response.replace_content_substring( "{error}", "" );
+            response.headers["Content-Length"] = std::to_string( response.content.length( ) );
         }
     }
     else
@@ -62,6 +60,7 @@ HttpResponse HttpRequestGET::process( )
 
 HttpResponse HttpRequestPOST::process( )
 {
+    MyUtility::get_utility( ).check_timed_out_sessions( );
     HttpResponse response;
     if ( url == "/login.html" )
     {
@@ -86,34 +85,32 @@ HttpResponse HttpRequestPOST::process( )
         }
         else
         {
-            auto user = MyUtility::get_utility().users.find( it->second );
-            if ( user == MyUtility::get_utility().users.end( ) ) // user not found
+            auto user = MyUtility::get_utility( ).users.find( it->second );
+            if ( user == MyUtility::get_utility( ).users.end( ) ) // user not found
             {
                 response.http_version = "HTTP/1.1";
                 response.status_code = "400";
                 response.status_desc = "User not found";
                 response.headers["Content-Type"] = "text/html; charset=UTF-8";
-                std::string page = login_html;
-                response.replace_substring( page, "{error}", "User not found" );
-                response.headers["Content-Length"] = std::to_string( page.length( ) );
-                response.content = page;
+                response.content = login_html;
+                response.replace_content_substring( "{error}", "User not found" );
+                response.headers["Content-Length"] = std::to_string( response.content.length( ) );
             }
             else
             {
-                if ( MyUtility::get_utility().users.find( it->second )->second == post.find( "password" )->second )
+                if ( MyUtility::get_utility( ).users.find( it->second )->second == post.find( "password" )->second )
                 {
                     response.http_version = "HTTP/1.1";
                     response.status_code = "200";
                     response.status_desc = "OK";
                     response.headers["Content-Type"] = "text/html; charset=UTF-8";
-                    std::string page = hello_html;
-                    response.replace_substring( page, "{username}", it->second );
-                    response.headers["Content-Length"] = std::to_string( page.length( ) );
-                    response.content = page;
-                    std::string session_id = std::to_string( MyUtility::get_utility().generate_session_id( ) );
-                    response.headers["Set-Cookie"] = "id=" + session_id;\
+                    response.content = hello_html;
+                    response.replace_content_substring( "{username}", it->second );
+                    response.headers["Content-Length"] = std::to_string( response.content.length( ) );
+                    std::string session_id = std::to_string( MyUtility::get_utility( ).generate_session_id( ) );
+                    response.headers["Set-Cookie"] = "id=" + session_id + "; Max-Age=" + std::to_string( MyUtility::timeout );
                     MySession s( session_id, it->second );
-                    MyUtility::get_utility().add_session( s );
+                    MyUtility::get_utility( ).add_session( s );
                 }
                 else
                 {
@@ -121,10 +118,9 @@ HttpResponse HttpRequestPOST::process( )
                     response.status_code = "400";
                     response.status_desc = "Invalid password";
                     response.headers["Content-Type"] = "text/html; charset=UTF-8";
-                    std::string page = login_html;
-                    response.replace_substring( page, "{error}", "Invalid password" );
-                    response.headers["Content-Length"] = std::to_string( page.length( ) );
-                    response.content = page;
+                    response.content = login_html;
+                    response.replace_content_substring( "{error}", "Invalid password" );
+                    response.headers["Content-Length"] = std::to_string( response.content.length( ) );
                 }
             }
         }

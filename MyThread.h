@@ -8,8 +8,8 @@ class MyThread
 {
 public:
     MyThread( );
-    int join( );
-    int cancel( );
+    int join( ) noexcept;
+    int cancel( ) noexcept;
     void create( ThreadSafeQueue* q );
 private:
     void run( );

@@ -13,8 +13,10 @@ struct HttpResponse
         
         std::map<std::string, std::string> headers;
 
-        std::string to_string();
-        void replace_substring( std::string& str, const std::string& what, const std::string& value );
+        std::string to_string() const;
+        void replace_content_substring( const std::string& what, const std::string& value );
 };
+
+HttpResponse generate_bad_request();
 
 #endif // _HTTP_RESPONSE_H

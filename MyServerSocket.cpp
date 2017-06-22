@@ -48,7 +48,6 @@ void MyServerSocket::bind()
     int result = ::bind( socket_fd, reinterpret_cast<sockaddr *>( &addr ), sizeof( addr ) );
     if( result < 0 )
     {
-        perror("Bind nawalil");
         throw std::bad_exception();
     }
 }
@@ -76,7 +75,7 @@ void MyServerSocket::close()
 {
     ( void ) ::close( socket_fd );
 }
-std::string MyServerSocket::get_buffer( int n ) const
+std::string MyServerSocket::get_buffer( int n ) const noexcept
 {
     return std::string( buffer, n );
 }

@@ -13,12 +13,29 @@ MyServer::~MyServer( )
 
 void MyServer::run( )
 {
-    pool.start_threads( &work_queue );
+    try
+    {
+        pool.start_threads( &work_queue );
+    }
+    catch(std::exception& e)
+    {
+        printf( "Could not start threads" );
+        return;
+    }
     std::vector<MyServerSocket> connected;
     fd_set fds;
     int nfds;
-    socket.bind( );
-    socket.listen( 10 );
+    try 
+    {
+        socket.bind( );
+        socket.listen( 10 );
+    }
+    catch ( std::exception& e)
+    {
+        printf( "Could not start the server" );
+        return;
+    }
+    
     nfds = socket.get_socket( );
     FD_ZERO( &fds );
     FD_SET( socket.get_socket( ), &fds );
@@ -49,7 +66,7 @@ void MyServer::run( )
                     {
                         FD_CLR( it->get_socket( ), &fds );
                         int amount = it->recv( );
-                        if ( amount >= 0 )
+                        if ( amount > 0 )
                         {
                             std::string received( it->get_buffer( amount ) );
                             it->clear_buffer( );

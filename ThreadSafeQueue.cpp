@@ -1,6 +1,7 @@
 #include <exception>
 #include "ThreadSafeQueue.h"
 #include "Work.h"
+#include "MyMutexGuard.h"
 
 ThreadSafeQueue::ThreadSafeQueue( )
 {
@@ -16,7 +17,7 @@ ThreadSafeQueue::~ThreadSafeQueue( )
 
 Work ThreadSafeQueue::pop( )
 {
-    (void) pthread_mutex_lock( &mutex );
+    MyMutexGuard guard(mutex);
     while ( queue.empty() )
     {
         int result = pthread_cond_wait( &condition_variable, &mutex );
@@ -27,22 +28,19 @@ Work ThreadSafeQueue::pop( )
     };
     Work item = queue.front( );
     queue.pop( );
-    (void) pthread_mutex_unlock( &mutex );  
     return item;
 }
 
 void ThreadSafeQueue::push( const Work& item )
 {
-    (void) pthread_mutex_lock( &mutex );
+    MyMutexGuard guard(mutex);;
     queue.push( item );
-    (void) pthread_mutex_unlock( &mutex );
     (void) pthread_cond_signal( &condition_variable );
 }
 
 void ThreadSafeQueue::push( Work && item )
 {
-    (void) pthread_mutex_lock( &mutex );
+    MyMutexGuard guard(mutex);
     queue.push( std::move( item ) );
     (void) pthread_cond_signal( &condition_variable );
-    (void) pthread_mutex_unlock( &mutex );
 }

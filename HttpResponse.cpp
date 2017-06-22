@@ -1,6 +1,6 @@
 #include "HttpResponse.h"
 
-std::string HttpResponse::to_string()
+std::string HttpResponse::to_string() const
 {
     std::string str;
     str += http_version + " " + status_code + " " + status_desc + "\r\n";
@@ -17,9 +17,19 @@ std::string HttpResponse::to_string()
     return str;
 }
 
-void HttpResponse::replace_substring( std::string& str, const std::string& what, const std::string& value )
+void HttpResponse::replace_content_substring( const std::string& what, const std::string& value )
 {
-    size_t pos =  str.find(what);
-    str.erase(pos,what.length());
-    str.insert(pos,value);
+    size_t pos =  content.find(what);
+    content.erase(pos,what.length());
+    content.insert(pos,value);
+}
+
+HttpResponse generate_bad_request()
+{
+    HttpResponse response;
+    response.content = "";
+    response.http_version = "HTTP/1.1";
+    response.status_code = "400";
+    response.status_desc = "Bad request";
+    return response;
 }

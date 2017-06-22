@@ -22,20 +22,21 @@ public:
 
     static MyUtility& get_utility( );
     int generate_session_id( );
-    bool check_timed_out_sessions( );
+    void check_timed_out_sessions( );
     void add_session( MySession s );
     const MySession* get_session( std::string& cookie ) const;
     std::map<std::string, std::string> users{
         { "admin", "password" },
         { "dawid", "dawid1" },
         { "user", "pass" } };
+    constexpr static int timeout = 600; // timeout in seconds
 private:
     MyUtility( );
     std::vector<MySession> sessions;
 
     int id = 0;
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-    constexpr static int timeout = 600; // timeout in seconds
+    
 };
 
 
