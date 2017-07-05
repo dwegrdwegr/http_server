@@ -10,9 +10,9 @@ class MyThreadPool
         int count;
     public:
         friend class MyThread;
-        MyThreadPool();
-        ~MyThreadPool();
-        void start_threads(ThreadSafeQueue* q);
+        MyThreadPool( ThreadSafeQueue* q );
+        ~MyThreadPool( );
+        void start_threads( );
 };
 
 #endif // _MYTHREADPOOL_H

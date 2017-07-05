@@ -3,13 +3,17 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>http_server</name>
-            <c-extensions/>
+            <name>client</name>
+            <c-extensions>c</c-extensions>
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
-            <sourceRootList/>
+            <sourceRootList>
+                <sourceRootElem>../headers</sourceRootElem>
+                <sourceRootElem>../jsmn</sourceRootElem>
+                <sourceRootElem>../sources</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>Debug</name>

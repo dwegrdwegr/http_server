@@ -2,7 +2,11 @@
 #include <sys/select.h>
 #include <vector>
 
-MyServer::MyServer( ) : socket( static_cast < unsigned short > ( 8080 ) )
+MyServer::MyServer( ) :
+    pool( &work_queue ),
+    socket( static_cast < unsigned short > ( 8080 ) ),
+    registration_socket( static_cast < unsigned short > ( 1337 ) ),
+    registration_thread( &registration_socket )
 {
 
 }
@@ -15,9 +19,9 @@ void MyServer::run( )
 {
     try
     {
-        pool.start_threads( &work_queue );
+        pool.start_threads( );
     }
-    catch(std::exception& e)
+    catch ( std::exception& e )
     {
         printf( "Could not start threads" );
         return;
@@ -25,17 +29,19 @@ void MyServer::run( )
     std::vector<MyServerSocket> connected;
     fd_set fds;
     int nfds;
-    try 
+    try
     {
+        registration_socket.bind( );
+        registration_socket.listen( 10 );
         socket.bind( );
         socket.listen( 10 );
     }
-    catch ( std::exception& e)
+    catch ( std::exception& e )
     {
         printf( "Could not start the server" );
         return;
     }
-    
+
     nfds = socket.get_socket( );
     FD_ZERO( &fds );
     FD_SET( socket.get_socket( ), &fds );
@@ -60,7 +66,9 @@ void MyServer::run( )
             }
             else
             {
-                for ( auto it = connected.begin( ); it != connected.end( ); ++it )
+                auto it = connected.begin( );
+                auto end = connected.end( );
+                while ( it != end )
                 {
                     if ( FD_ISSET( it->get_socket( ), &fds ) )
                     {
@@ -72,10 +80,11 @@ void MyServer::run( )
                             it->clear_buffer( );
                             Work w{ *it, received };
                             work_queue.push( std::move( w ) );
+                            ++it;
                         }
                         else if ( amount == 0 ) // connection is closed
                         {
-                            connected.erase( it );
+                            connected.erase( it++ );
                         }
                     }
                 }

@@ -19,6 +19,7 @@ class MyServerSocket
         void send( const std::string& msg );
         int recv();
         void close();
+        void connect();
         std::string get_buffer( int n ) const noexcept;
         void clear_buffer();
         const int32_t& get_socket() const noexcept;

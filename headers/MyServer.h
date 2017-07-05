@@ -9,6 +9,8 @@ class MyServer
         ThreadSafeQueue work_queue;
         MyThreadPool pool;
         MyServerSocket socket;
+        MyServerSocket registration_socket;
+        MyRegistrationThread registration_thread;
     public:
         MyServer();
         ~MyServer();
