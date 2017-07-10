@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="headers" displayName="headers" projectFiles="true">
+        <itemPath>../headers/MyServerSocket.h</itemPath>
       </logicalFolder>
       <logicalFolder name="jsmn" displayName="jsmn" projectFiles="true">
         <itemPath>../jsmn/jsmn.c</itemPath>
@@ -55,7 +56,14 @@
             <pElem>../jsmn</pElem>
           </incDir>
         </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibFileItem>../jsmn/libjsmn.a</linkerLibFileItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <item path="../headers/MyServerSocket.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../jsmn/jsmn.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="../jsmn/jsmn.h" ex="false" tool="3" flavor2="0">
@@ -85,6 +93,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="../headers/MyServerSocket.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../jsmn/jsmn.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="../jsmn/jsmn.h" ex="false" tool="3" flavor2="0">

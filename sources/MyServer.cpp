@@ -32,28 +32,35 @@ void MyServer::run( )
     try
     {
         registration_socket.bind( );
-        registration_socket.listen( 10 );
+        registration_socket.listen( 128 );
         socket.bind( );
-        socket.listen( 10 );
+        socket.listen( 128 );
     }
     catch ( std::exception& e )
     {
         printf( "Could not start the server" );
         return;
     }
-
+    registration_thread.create( );
     nfds = socket.get_socket( );
     FD_ZERO( &fds );
     FD_SET( socket.get_socket( ), &fds );
     while ( true )
     {
-        for ( auto it = connected.begin( ); it != connected.end( ); ++it )
+        if ( !connected.empty( ) )
         {
-            FD_SET( it->get_socket( ), &fds );
-            if ( it->get_socket( ) >= nfds )
+            for ( auto it = connected.begin( ); it != connected.end( ); ++it )
             {
-                nfds = it->get_socket( ) + 1;
+                FD_SET( it->get_socket( ), &fds );
+                if ( it->get_socket( ) >= nfds )
+                {
+                    nfds = it->get_socket( );
+                }
             }
+        }
+        else
+        {
+            nfds = socket.get_socket( );
         }
 
         if ( select( nfds + 1, &fds, NULL, NULL, NULL ) > 0 )
@@ -84,7 +91,10 @@ void MyServer::run( )
                         }
                         else if ( amount == 0 ) // connection is closed
                         {
+                            FD_CLR( it->get_socket( ), &fds );
+                            it->close( );
                             connected.erase( it++ );
+
                         }
                     }
                 }

@@ -2,6 +2,7 @@
 #include <chrono>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include "MyMutexGuard.h"
 
 MySession::MySession( const std::string& id, const std::string& username )
@@ -13,12 +14,26 @@ MySession::MySession( const std::string& id, const std::string& username )
 
 MyUtility::MyUtility( )
 {
+    std::ifstream file( "users.txt" );
+    if ( file.is_open( ) )
+    {
+        std::string key;
+        std::string value;
+        while ( file >> key >> value )
+        {
+            users[key] = value;
+        }
+        file.close( );
+    }
+}
+
+MyUtility::~MyUtility( )
+{
 
 }
 
 int MyUtility::generate_session_id( )
 {
-
     static int id = 0;
     MyMutexGuard lock( mutex );
     if ( id == INTMAX_MAX )
@@ -38,7 +53,7 @@ MyUtility& MyUtility::get_utility( )
     return utility;
 }
 
-const MySession* MyUtility::get_session( std::string& cookie ) const
+const MySession* MyUtility::get_session( std::string& cookie )
 {
     std::stringstream stream( cookie );
     std::string key_pair;
@@ -49,7 +64,7 @@ const MySession* MyUtility::get_session( std::string& cookie ) const
     std::string value;
     std::getline( stream, key, '=' );
     std::getline( stream, value );
-
+    MyMutexGuard guard( mutex );
     for ( size_t i = 0; i < sessions.size( ); i++ )
     {
         if ( sessions[i].id == value )
@@ -62,20 +77,20 @@ const MySession* MyUtility::get_session( std::string& cookie ) const
 
 void MyUtility::add_session( MySession s )
 {
+    MyMutexGuard guard( mutex );
     sessions.push_back( s );
 }
 
 void MyUtility::check_timed_out_sessions( )
 {
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now( );
-    MyMutexGuard guard(mutex);
+    MyMutexGuard guard( mutex );
     for ( size_t i = 0; i < sessions.size( ); i++ )
     {
         std::chrono::duration<double> dur = sessions[i].time - now;
         if ( dur.count( ) >= timeout )
         {
-            
             sessions.erase( sessions.begin( ) + i );
         }
-    }    
+    }
 }

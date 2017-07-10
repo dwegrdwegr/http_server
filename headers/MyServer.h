@@ -10,7 +10,7 @@ class MyServer
         MyThreadPool pool;
         MyServerSocket socket;
         MyServerSocket registration_socket;
-        MyRegistrationThread registration_thread;
+        MyJSONThread registration_thread;
     public:
         MyServer();
         ~MyServer();

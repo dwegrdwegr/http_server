@@ -2,6 +2,7 @@
 #include <exception>
 #include <errno.h>
 #include <algorithm>
+#include <arpa/inet.h>
 
 MyServerSocket::MyServerSocket( uint16_t p, int domain , int type, int protocol ) : port { p }
 {
@@ -63,9 +64,9 @@ int MyServerSocket::accept()
 {
     return ::accept( socket_fd, nullptr, nullptr );
 }
-void MyServerSocket::send( const std::string& msg )
+int MyServerSocket::send( const std::string& msg )
 {
-    ( void )::send( socket_fd, ( void * ) msg.c_str(), msg.length(), 0 );
+    return ::send( socket_fd, ( void * ) msg.c_str(), msg.length(), 0 );
 }
 int MyServerSocket::recv()
 {
@@ -75,6 +76,21 @@ void MyServerSocket::close()
 {
     ( void ) ::close( socket_fd );
 }
+
+int MyServerSocket::connect( )
+{
+    addr.sin6_family = AF_INET6;
+    addr.sin6_flowinfo = 0;
+    (void) inet_pton(AF_INET6, "::1",(struct sockaddr *) &addr.sin6_addr);
+    addr.sin6_port = htons ( port );
+    int result = ::connect(socket_fd, (struct sockaddr *) &addr, sizeof(addr));
+    if ( result == -1 )
+    {
+        printf("Error. Can't connect\n");
+    }
+    return result;
+}
+
 std::string MyServerSocket::get_buffer( int n ) const noexcept
 {
     return std::string( buffer, n );

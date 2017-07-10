@@ -27,13 +27,13 @@ private:
     ThreadSafeQueue* work_queue;
 };
 
-class MyRegistrationThread : public MyBasicThread
+class MyJSONThread : public MyBasicThread
 {
 public:
-    explicit MyRegistrationThread( MyServerSocket* s );
+    explicit MyJSONThread( MyServerSocket* s );
 private:
     void run( ) override;
-    void register_users( const std::string& json );
+    void manage_requests( const std::string& json, MyServerSocket& client );
 
     MyServerSocket* socket;
 };
